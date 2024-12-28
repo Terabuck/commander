@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DICOM Viewer</title>
+    <script src="https://unpkg.com/cornerstone-core@2.3.0/dist/cornerstone.js"></script>
+    <script src="https://unpkg.com/dicom-parser@1.8.1/dist/dicomParser.js"></script>
+</head>
+<body>
+    <h1>Modificar SeriesInstanceUID en Archivos DICOM</h1>
+    <input type="file" id="dicom-file" accept=".dcm">
+    <div>
+        <label><input type="radio" name="crop-mode" value="rectangle" checked> Rectángulo</label>
+        <label><input type="radio" name="crop-mode" value="polygon"> Polígono</label>
+    </div>
+    <div>
+        <label><input type="radio" name="mask-color" value="black" checked> Negro</label>
+        <label><input type="radio" name="mask-color" value="white"> Blanco</label>
+    </div>
+    <div class="thumbnails">
+        <h2>Mammography DICOM Images</h2>
+        <div class="thumbnail-pair">
+            <div class="thumbnail-container right" id="R-CC-container"></div>
+            <div class="thumbnail-container left" id="L-CC-container"></div>
+        </div>
+        <div class="thumbnail-pair">
+            <div class="thumbnail-container right" id="R-MLO-container"></div>
+            <div class="thumbnail-container left" id="L-MLO-container"></div>
+        </div>
+    </div>
+    <div class="thumbnails">
+        <h2>Non-Mammography DICOM Images</h2>
+        <div id="non-mammo-container"></div>
+    </div>
+    <div id="selected-image-container">
+        <img id="selected-image" src="" alt="Selected Image">
+        <canvas id="crop-canvas"></canvas>
+        <button id="center-image-button">Centrar Imagen</button>
+    </div>
+    <div id="preview-container">
+        <h2>Previsualización del Recorte</h2>
+        <canvas id="preview-canvas"></canvas>
+    </div>
+    <button id="crop-button">Crop Image</button>
+    <script src="scripts.js"></script>
+</body>
+</html>
