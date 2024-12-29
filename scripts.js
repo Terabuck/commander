@@ -181,6 +181,21 @@ function fitImageToWindow() {
 }
 
 // Event listeners for controls
+// Wait for the DOM to load
+document.addEventListener('DOMContentLoaded', function () {
+  // Get the Rectangle-Polygon button by its ID
+  const togglePolygonButton = document.getElementById('togglePolygonMode');
+
+  // Add a click event listener to the button
+  togglePolygonButton.addEventListener('click', function () {
+    // Toggle functionality placeholder
+    console.log('Rectangle-Polygon button clicked!');
+
+    // You can implement mode switching here
+    // Example: toggle between 'Rectangle' and 'Polygon' mode
+  });
+});
+
 document
   .getElementById("fitToWindow")
   .addEventListener("click", fitImageToWindow);
