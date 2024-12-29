@@ -34,31 +34,27 @@ function initializeViewer() {
   }
 }
 
-document
-  .getElementById("dicom-file")
-  .addEventListener("change", function (e) {
-    clearLog();
-    const file = e.target.files[0];
-    log("File selected: " + file.name);
+document.getElementById("dicom-file").addEventListener("change", function (e) {
+  clearLog();
+  const file = e.target.files[0];
+  log("File selected: " + file.name);
 
-    const reader = new FileReader();
+  const reader = new FileReader();
 
-    reader.onload = function (file) {
-      try {
-        const arrayBuffer = file.target.result;
-        log(
-          "File loaded into buffer, size: " +
-            arrayBuffer.byteLength +
-            " bytes"
-        );
-        loadDicomFile(arrayBuffer);
-      } catch (error) {
-        log("Error reading file: " + error.message);
-      }
-    };
+  reader.onload = function (file) {
+    try {
+      const arrayBuffer = file.target.result;
+      log(
+        "File loaded into buffer, size: " + arrayBuffer.byteLength + " bytes"
+      );
+      loadDicomFile(arrayBuffer);
+    } catch (error) {
+      log("Error reading file: " + error.message);
+    }
+  };
 
-    reader.readAsArrayBuffer(file);
-  });
+  reader.readAsArrayBuffer(file);
+});
 
 function loadDicomFile(arrayBuffer) {
   try {
@@ -181,15 +177,17 @@ function fitImageToWindow() {
 }
 
 // Event listeners for controls
+
 // Wait for the DOM to load
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener("DOMContentLoaded", function () {
   // Get the Rectangle-Polygon button by its ID
-  const togglePolygonButton = document.getElementById('togglePolygonMode');
+  const togglePolygonButton = document.getElementById("togglePolygonMode");
 
   // Add a click event listener to the button
-  togglePolygonButton.addEventListener('click', function () {
+  togglePolygonButton.addEventListener("click", function () {
     // Toggle functionality placeholder
-    console.log('Rectangle-Polygon button clicked!');
+    console.log("Rectangle-Polygon button clicked!");
+    log("Rectangle-Polygon button clicked!");
 
     // You can implement mode switching here
     // Example: toggle between 'Rectangle' and 'Polygon' mode
@@ -200,93 +198,251 @@ document
   .getElementById("fitToWindow")
   .addEventListener("click", fitImageToWindow);
 
-document
-  .getElementById("actualSize")
-  .addEventListener("click", function () {
-    if (!currentImage) return;
-    const element = document.getElementById("dicomImage");
-    const viewport = cornerstone.getViewport(element);
-    viewport.scale = 1;
-    viewport.translation.x = 0;
-    viewport.translation.y = 0;
-    cornerstone.setViewport(element, viewport);
-  });
+document.getElementById("actualSize").addEventListener("click", function () {
+  if (!currentImage) return;
+  const element = document.getElementById("dicomImage");
+  const viewport = cornerstone.getViewport(element);
+  viewport.scale = 1;
+  viewport.translation.x = 0;
+  viewport.translation.y = 0;
+  cornerstone.setViewport(element, viewport);
+});
 
-document
-  .getElementById("invertImage")
-  .addEventListener("click", function () {
-    if (!currentImage) return;
-    const element = document.getElementById("dicomImage");
-    const viewport = cornerstone.getViewport(element);
-    viewport.invert = !viewport.invert;
-    cornerstone.setViewport(element, viewport);
-  });
+document.getElementById("invertImage").addEventListener("click", function () {
+  if (!currentImage) return;
+  const element = document.getElementById("dicomImage");
+  const viewport = cornerstone.getViewport(element);
+  viewport.invert = !viewport.invert;
+  cornerstone.setViewport(element, viewport);
+});
 
-document
-  .getElementById("windowWidth")
-  .addEventListener("input", function (e) {
-    if (!currentImage) return;
-    const element = document.getElementById("dicomImage");
-    const viewport = cornerstone.getViewport(element);
-    viewport.voi.windowWidth = Number(e.target.value);
-    cornerstone.setViewport(element, viewport);
-  });
+document.getElementById("windowWidth").addEventListener("input", function (e) {
+  if (!currentImage) return;
+  const element = document.getElementById("dicomImage");
+  const viewport = cornerstone.getViewport(element);
+  viewport.voi.windowWidth = Number(e.target.value);
+  cornerstone.setViewport(element, viewport);
+});
 
-document
-  .getElementById("windowCenter")
-  .addEventListener("input", function (e) {
-    if (!currentImage) return;
-    const element = document.getElementById("dicomImage");
-    const viewport = cornerstone.getViewport(element);
-    viewport.voi.windowCenter = Number(e.target.value);
-    cornerstone.setViewport(element, viewport);
-  });
+document.getElementById("windowCenter").addEventListener("input", function (e) {
+  if (!currentImage) return;
+  const element = document.getElementById("dicomImage");
+  const viewport = cornerstone.getViewport(element);
+  viewport.voi.windowCenter = Number(e.target.value);
+  cornerstone.setViewport(element, viewport);
+});
 
 // Begin version 07
 // Event listeners for crop controls
-document
-  .getElementById("enableCrop")
-  .addEventListener("click", function () {
-    isCropping = !isCropping;
-    this.classList.toggle("active-tool");
+document.getElementById("enableCrop").addEventListener("click", function () {
+  isCropping = !isCropping;
+  this.classList.toggle("active-tool");
 
-    if (!isCropping) {
-      const overlay = document.getElementById("cropOverlay");
-      const ctx = overlay.getContext("2d");
-      ctx.clearRect(0, 0, overlay.width, overlay.height);
-      document
-        .querySelector(".preview-container")
-        .classList.remove("active");
-    }
-  });
-
-document
-  .getElementById("clearCrop")
-  .addEventListener("click", function () {
+  if (!isCropping) {
     const overlay = document.getElementById("cropOverlay");
     const ctx = overlay.getContext("2d");
     ctx.clearRect(0, 0, overlay.width, overlay.height);
-    cropRegion = null;
-    document
-      .querySelector(".preview-container")
-      .classList.remove("active");
-  });
+    document.querySelector(".preview-container").classList.remove("active");
+  }
+});
 
-document
-  .getElementById("maskColor")
-  .addEventListener("change", function () {
-    if (cropRegion) {
-      showCropPreview();
+document.getElementById("clearCrop").addEventListener("click", function () {
+  const overlay = document.getElementById("cropOverlay");
+  const ctx = overlay.getContext("2d");
+  ctx.clearRect(0, 0, overlay.width, overlay.height);
+  cropRegion = null;
+  document.querySelector(".preview-container").classList.remove("active");
+});
+
+document.getElementById("maskColor").addEventListener("change", function () {
+  if (cropRegion) {
+    showCropPreview();
+  }
+});
+
+
+// Global state to manage selection mode
+let selectionMode = 'Rectangle'; // Default to 'Rectangle'
+let isDrawing = false; // Tracks whether the user is actively drawing
+let polygonPoints = []; // Stores points for the Polygon
+
+// Wait for the DOM to load
+document.addEventListener('DOMContentLoaded', function () {
+  const togglePolygonButton = document.getElementById('togglePolygonMode');
+  const canvas = document.getElementById('previewCanvas'); // Assuming this is the canvas
+  const ctx = canvas.getContext('2d'); // Canvas context
+
+  // Add a click event listener to the button
+  togglePolygonButton.addEventListener('click', function () {
+    // Toggle between Rectangle and Polygon modes
+    if (selectionMode === 'Rectangle') {
+      selectionMode = 'Polygon';
+      log('Selection mode switched to: Polygon');
+    } else {
+      selectionMode = 'Rectangle';
+      log('Selection mode switched to: Rectangle');
+    }
+
+    // Update the button text (optional, for better UX)
+    togglePolygonButton.textContent = `${selectionMode} Enabled`;
+
+    // Clear any existing drawing if mode changes
+    resetCanvas(ctx);
+  });
+   // Add event listeners to the canvas
+canvas.addEventListener('mousedown', function (e) {
+    if (selectionMode === 'Rectangle') {
+      startRectangle(e, canvas, ctx);
+    } else if (selectionMode === 'Polygon') {
+      addPolygonPoint(e, canvas);
     }
   });
-
+  
+  // Double-click to close the polygon
+  canvas.addEventListener('dblclick', function () {
+    if (selectionMode === 'Polygon' && polygonPoints.length > 2) {
+      closePolygon();
+    }
+  });
+  
+    canvas.addEventListener('mousemove', function (e) {
+      if (selectionMode === 'Rectangle' && isDrawing) {
+        drawRectanglePreview(e, canvas, ctx);
+      }
+    });
+  
+    canvas.addEventListener('mouseup', function (e) {
+      if (selectionMode === 'Rectangle' && isDrawing) {
+        finalizeRectangle(e, canvas, ctx);
+      }
+    });
+});
 //end version 07
+
+
+// Function to start drawing a rectangle
+function startRectangle(e, canvas, ctx) {
+  isDrawing = true;
+  const rect = canvas.getBoundingClientRect();
+  ctx.startX = e.clientX - rect.left;
+  ctx.startY = e.clientY - rect.top;
+}
+
+// Function to preview the rectangle while drawing
+function drawRectanglePreview(e, canvas, ctx) {
+  const rect = canvas.getBoundingClientRect();
+  const currentX = e.clientX - rect.left;
+  const currentY = e.clientY - rect.top;
+
+  // Clear previous rectangle preview
+  resetCanvas(ctx);
+
+  // Draw the new rectangle
+  ctx.beginPath();
+  ctx.rect(ctx.startX, ctx.startY, currentX - ctx.startX, currentY - ctx.startY);
+  ctx.strokeStyle = 'blue';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+// Function to finalize the rectangle
+function finalizeRectangle(e, canvas, ctx) {
+  isDrawing = false;
+  const rect = canvas.getBoundingClientRect();
+  const endX = e.clientX - rect.left;
+  const endY = e.clientY - rect.top;
+
+  // Draw the final rectangle
+  ctx.beginPath();
+  ctx.rect(ctx.startX, ctx.startY, endX - ctx.startX, endY - ctx.startY);
+  ctx.strokeStyle = 'blue';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  log(
+    `Rectangle drawn from (${ctx.startX}, ${ctx.startY}) to (${endX}, ${endY})`
+  );
+}
+
+// Function to add a point to the polygon
+function addPolygonPoint(e, canvas) {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+  
+    // Add the point to the polygon points array
+    polygonPoints.push({ x, y });
+  
+    // Redraw the polygon points and lines
+    const ctx = canvas.getContext('2d');
+    resetCanvas(ctx);
+    drawPolygon(ctx, polygonPoints);
+  
+    log(`Polygon point added at (${x}, ${y})`);
+  }
+  
+  // Function to draw the polygon
+  function drawPolygon(ctx, points) {
+    if (points.length === 0) return;
+  
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+  
+    for (let i = 1; i < points.length; i++) {
+      ctx.lineTo(points[i].x, points[i].y);
+    }
+  
+    // Optional: If the polygon is closed, draw the closing line
+    if (points.length > 2 && points[points.length - 1].closed) {
+      ctx.lineTo(points[0].x, points[0].y);
+    }
+  
+    // Draw the polygon lines
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  
+    // Draw points for visual feedback
+    points.forEach((point) => {
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, 3, 0, 2 * Math.PI);
+      ctx.fillStyle = 'red';
+      ctx.fill();
+    });
+  }
+  
+  // Function to close the polygon
+  function closePolygon() {
+    if (polygonPoints.length < 3) {
+      log('Polygon must have at least 3 points to close.');
+      return;
+    }
+  
+    // Mark the polygon as closed
+    polygonPoints[polygonPoints.length - 1].closed = true;
+  
+    // Redraw the canvas with the closed polygon
+    const canvas = document.getElementById('previewCanvas');
+    const ctx = canvas.getContext('2d');
+    resetCanvas(ctx);
+    drawPolygon(ctx, polygonPoints);
+  
+    log('Polygon closed.');
+  }
+
+// Function to reset the canvas
+function resetCanvas(ctx) {
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  if (selectionMode === 'Polygon') {
+    drawPolygon(ctx, polygonPoints); // Redraw polygon points if in Polygon mode
+  }
+}
 
 window.onload = initializeViewer;
 
 // Add these new variables for cropping
 let isCropping = false;
-let isDrawing = false;
+// moved upwards let isDrawing = false;
 let startX, startY, currentX, currentY;
 let cropRegion = null;
 
@@ -383,35 +539,27 @@ function initializeCropping() {
   updateOverlaySize();
   window.addEventListener("resize", updateOverlaySize);
 
-  document
-    .getElementById("enableCrop")
-    .addEventListener("click", function () {
-      resetCropVariables();
-      if (!this.classList.contains("active-tool")) {
-        cropRegion = null;
-        log("RESET: Crop tool disabled - all variables cleared");
-      } else {
-        log("RESET: Crop tool enabled - ready for new selection");
-      }
-      cropSessionCounter = 0;
-    });
+  document.getElementById("enableCrop").addEventListener("click", function () {
+    resetCropVariables();
+    if (!this.classList.contains("active-tool")) {
+      cropRegion = null;
+      log("RESET: Crop tool disabled - all variables cleared");
+    } else {
+      log("RESET: Crop tool enabled - ready for new selection");
+    }
+    cropSessionCounter = 0;
+  });
 
   // Add clear handler with logging
-  document
-    .getElementById("clearCrop")
-    .addEventListener("click", function () {
-      resetCropVariables();
-      cropRegion = null;
-      const ctx = overlay.getContext("2d");
-      ctx.clearRect(0, 0, overlay.width, overlay.height);
-      document
-        .querySelector(".preview-container")
-        .classList.remove("active");
-      cropSessionCounter = 0;
-      log(
-        "RESET: Manual clear requested - all variables and display cleared"
-      );
-    });
+  document.getElementById("clearCrop").addEventListener("click", function () {
+    resetCropVariables();
+    cropRegion = null;
+    const ctx = overlay.getContext("2d");
+    ctx.clearRect(0, 0, overlay.width, overlay.height);
+    document.querySelector(".preview-container").classList.remove("active");
+    cropSessionCounter = 0;
+    log("RESET: Manual clear requested - all variables and display cleared");
+  });
 
   element.addEventListener("mousedown", startCropDraw);
   element.addEventListener("mousemove", updateCropDraw);
@@ -432,9 +580,7 @@ function initializeCropping() {
     cropRegion = null;
     const ctx = overlay.getContext("2d");
     ctx.clearRect(0, 0, overlay.width, overlay.height);
-    document
-      .querySelector(".preview-container")
-      .classList.remove("active");
+    document.querySelector(".preview-container").classList.remove("active");
 
     cropSessionCounter++;
     log(`START: New crop session #${cropSessionCounter}`);
@@ -446,9 +592,7 @@ function initializeCropping() {
     currentX = startX;
     currentY = startY;
 
-    log(
-      `START: Initial coordinates - startX=${startX}, startY=${startY}`
-    );
+    log(`START: Initial coordinates - startX=${startX}, startY=${startY}`);
   }
 
   function updateCropDraw(e) {
@@ -487,9 +631,7 @@ function initializeCropping() {
         width: width,
         height: height,
       };
-      log(
-        `END: Valid selection created in session #${cropSessionCounter}`
-      );
+      log(`END: Valid selection created in session #${cropSessionCounter}`);
       showCropPreview();
     } else {
       // Clear if selection is too small
@@ -499,9 +641,7 @@ function initializeCropping() {
       const ctx = overlay.getContext("2d");
       ctx.clearRect(0, 0, overlay.width, overlay.height);
       cropRegion = null;
-      document
-        .querySelector(".preview-container")
-        .classList.remove("active");
+      document.querySelector(".preview-container").classList.remove("active");
     }
 
     // Reset variables after successful end
@@ -530,9 +670,7 @@ function showCropPreview() {
     return;
   }
 
-  log(
-    `PREVIEW: Starting preview for crop session #${cropSessionCounter}`
-  );
+  log(`PREVIEW: Starting preview for crop session #${cropSessionCounter}`);
   log(
     `PREVIEW: Using crop region - x=${cropRegion.x}, y=${cropRegion.y}, w=${cropRegion.width}, h=${cropRegion.height}`
   );
@@ -580,31 +718,27 @@ function showCropPreview() {
 }
 
 // Update window/level change handlers to refresh preview
-document
-  .getElementById("windowWidth")
-  .addEventListener("input", function (e) {
-    if (!currentImage) return;
-    const element = document.getElementById("dicomImage");
-    const viewport = cornerstone.getViewport(element);
-    viewport.voi.windowWidth = Number(e.target.value);
-    cornerstone.setViewport(element, viewport);
-    if (cropRegion) {
-      showCropPreview();
-    }
-  });
+document.getElementById("windowWidth").addEventListener("input", function (e) {
+  if (!currentImage) return;
+  const element = document.getElementById("dicomImage");
+  const viewport = cornerstone.getViewport(element);
+  viewport.voi.windowWidth = Number(e.target.value);
+  cornerstone.setViewport(element, viewport);
+  if (cropRegion) {
+    showCropPreview();
+  }
+});
 
-document
-  .getElementById("windowCenter")
-  .addEventListener("input", function (e) {
-    if (!currentImage) return;
-    const element = document.getElementById("dicomImage");
-    const viewport = cornerstone.getViewport(element);
-    viewport.voi.windowCenter = Number(e.target.value);
-    cornerstone.setViewport(element, viewport);
-    if (cropRegion) {
-      showCropPreview();
-    }
-  });
+document.getElementById("windowCenter").addEventListener("input", function (e) {
+  if (!currentImage) return;
+  const element = document.getElementById("dicomImage");
+  const viewport = cornerstone.getViewport(element);
+  viewport.voi.windowCenter = Number(e.target.value);
+  cornerstone.setViewport(element, viewport);
+  if (cropRegion) {
+    showCropPreview();
+  }
+});
 
 // Modify the window.onload to initialize cropping
 window.onload = function () {
